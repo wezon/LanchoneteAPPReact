@@ -4,7 +4,7 @@ import NumberFormat from 'react-number-format';
 
 export default produto = ({ img, nome, preco, descricao }) => {
     return (
-        <KeyboardAvoidingView style={styles.background} behavior="padding" enabled>
+        <View style={styles.background} behavior="padding" enabled>
             <View style={styles.containerIMG}>
                 <Text style={styles.text}>{img}</Text>
             </View>
@@ -22,7 +22,7 @@ export default produto = ({ img, nome, preco, descricao }) => {
                     } />
                 <Text style={styles.text}>Desc: {descricao}</Text>
             </View>
-        </KeyboardAvoidingView>
+        </View>
     );
 }
 
