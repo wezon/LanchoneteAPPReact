@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, TextInput, View, KeyboardAvoidingView, TouchableOpacity, Image, AsyncStorage } from 'react-native';
+import { StyleSheet, Text, TextInput, View, KeyboardAvoidingView, TouchableOpacity, Image, AsyncStorage, Alert } from 'react-native';
 import apiNode from '../services/apiNode';
 
 export default class App extends Component {
@@ -7,19 +7,20 @@ export default class App extends Component {
   state = {
     errorMessage: null,
     login: null,
-    senha: null
+    senha: null,
+    usuarioLogado: null
   };
   render() {
     return(
     <KeyboardAvoidingView style={styles.background} behavior="padding" enabled>
-      
       <View style={styles.containerLogo}>
         <Image
           source={require('../assets/logo.png')}
         />
       </View>
       <View style={styles.container}>
-        <Text style={styles.text} > {this.state.errorMessage} </Text>
+    {!!this.state.errorMessage && <Text style={styles.text}> {this.state.errorMessage} </Text> }
+    {!!this.state.usuarioLogado && <Text style={styles.text}> {this.state.usuarioLogado.nome} </Text> }
         <TextInput
           placeholder="Login"
           autoCorrect={false}
@@ -38,32 +39,42 @@ export default class App extends Component {
           <Text style={styles.text}> Acessar</Text>
         </TouchableOpacity>
         <TouchableOpacity>
-          <Text style={styles.text}>Esqueci minha senha</Text>
+          <Text onPress={this.teste} style={styles.text}>Esqueci minha senha</Text>
         </TouchableOpacity>
       </View>
 
     </KeyboardAvoidingView>
     )};
+ async componentDidMount(){
+  const token = await AsyncStorage.getItem('@LanchoneteAPPReact:token');
+  const user = JSON.parse( await AsyncStorage.getItem('@LanchoneteAPPReact:user'));
+  console.log(token);
+  console.log(user);
+  
+  if( token && user)
+    this.setState({usuarioLogado: user});
+   
+ }
+teste = async() =>{
+  const response = await apiNode.get('/produto');
+  console.log(response);
 
-  signIn = async () => {
+}
+signIn = async () => {
     try {
-      console.log("responswwe");
-
       const response = await apiNode.post('/User/auth', {
         login: this.state.login,
         senha: this.state.senha
       });
-      console.log(response);
-
-
       const { user, token } = response.data;
-
       await AsyncStorage.multiSet([
         ['@LanchoneteAPPReact:token', token],
         ['@LanchoneteAPPReact:user', JSON.stringify(user)],
       ]);
+      this.setState({usuarioLogado: user});
+
     } catch (response) {
-      this.setState({ errorMessage: response.problem });
+      this.setState({ errorMessage: response.data.error });
     }
   };
 }

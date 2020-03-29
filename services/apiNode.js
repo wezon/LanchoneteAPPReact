@@ -1,8 +1,14 @@
+import { AsyncStorage } from 'react-native';
 import { create } from 'apisauce';
 const api = create({
     baseURL: 'http://192.168.0.102:3000/',
 });
-
+api.addAsyncRequestTransform(request => async()=> {
+    const token = await AsyncStorage.getItem('@LanchoneteAPPReact:token');
+  
+    if( token )
+      request.headers['Authorization'] = `Bearer ${token}`;
+});
 api.addResponseTransform(response=> {
 
     if(!response.ok) 
