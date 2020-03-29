@@ -2,13 +2,19 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, TextInput, View, KeyboardAvoidingView, TouchableOpacity, Image, AsyncStorage, Alert } from 'react-native';
 import apiNode from '../services/apiNode';
 
-export default class App extends Component {
+export default class Login extends Component {
 
+
+  Login({navigation})
+  {
+    console.log("navigation");
+
+  }
   state = {
     errorMessage: null,
     login: null,
     senha: null,
-    usuarioLogado: null
+    usuarioLogado: null,
   };
   render() {
     return(
@@ -33,6 +39,7 @@ export default class App extends Component {
           autoCorrect={false}
           style={styles.input}
           onChangeText={(value) => this.setState({senha: value})}
+          secureTextEntry={true}
             value={this.state.senha}
         />
         <TouchableOpacity style={styles.botao} onPress={this.signIn}>
@@ -55,9 +62,8 @@ export default class App extends Component {
     this.setState({usuarioLogado: user});
    
  }
-teste = async() =>{
-  const response = await apiNode.get('/produto');
-  console.log(response);
+teste = () =>{
+  
 
 }
 signIn = async () => {
@@ -72,6 +78,8 @@ signIn = async () => {
         ['@LanchoneteAPPReact:user', JSON.stringify(user)],
       ]);
       this.setState({usuarioLogado: user});
+      this.props.navigation.navigate('ListaProdutos');
+      
 
     } catch (response) {
       this.setState({ errorMessage: response.data.error });
