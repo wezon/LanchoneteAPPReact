@@ -4,25 +4,29 @@ import NumberFormat from 'react-number-format';
 
 export default produto = ({ img, nome, preco, descricao }) => {
     return (
-        <View style={styles.background} behavior="padding" enabled>
-            <View style={styles.containerIMG}>
-                <Text style={styles.text}>{img}</Text>
+        <View>
+            <View style={styles.background} behavior="padding" enabled>
+                <View style={styles.containerIMG}>
+                    <Text style={styles.text}>{img}</Text>
+                </View>
+                <View style={styles.container}>
+                    <Text style={styles.text}>Nome: {nome}</Text>
+                    <NumberFormat
+                        decimalScale={2}
+                        fixedDecimalScale={true}
+                        value={preco}
+                        displayType={'text'}
+                        thousandSeparator={true}
+                        prefix={'R$'}
+                        renderText={
+                            value => <Text style={styles.text}>Preço: {value}</Text>
+                        } />
+                    <Text style={styles.text}>Desc: {descricao}</Text>
+                </View>
             </View>
-            <View style={styles.container}>
-                <Text style={styles.text}>Nome: {nome}</Text>
-                <NumberFormat
-                    decimalScale={2}
-                    fixedDecimalScale={true}
-                    value={preco}
-                    displayType={'text'}
-                    thousandSeparator={true}
-                    prefix={'R$'}
-                    renderText={
-                        value => <Text style={styles.text}>Preço: {value}</Text>
-                    } />
-                <Text style={styles.text}>Desc: {descricao}</Text>
-            </View>
+            <View style={styles.linha} />
         </View>
+
     );
 }
 
@@ -54,5 +58,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingBottom: 10,
     },
+    linha: {
+        borderWidth: 0.5,
+        borderColor: 'white',
+        margin: 10,
+    }
 
 });
