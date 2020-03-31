@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, ScrollView } from 'react-native';
+import { StyleSheet, View, ScrollView, TouchableOpacity } from 'react-native';
 import Produto from '../screens/produto';
 import apiNode from '../services/apiNode';
 
@@ -8,6 +8,10 @@ export default class listaProdutos extends Component {
   state = {
     produtos: []
   };
+  onClickProduto = async (id) => {
+    console.log(id);
+    this.props.navigation.navigate('ProdutoDetalhado',{ id: { id } });
+  }
   async componentDidMount() {
     try {
       const produto = await apiNode.get('/produto');
@@ -20,29 +24,27 @@ export default class listaProdutos extends Component {
   render() {
     return (
       <ScrollView style={styles.background} behavior="padding" enabled>
-
         {
-          this.state.produtos.map((produto) => 
-            < Produto img="IMdAGEM"
-              nome={produto.descricaoCurta}
-              preco={produto.preco}
-              descricao={produto.descricaoCurta}
-              key={produto._id}
-            />)
-        }
-        
+          this.state.produtos.map(produto => (
+            <TouchableOpacity onPress={() => this.onClickProduto(produto._id)} key={produto._id}>
+              < Produto img="IMdAGEM"
+                nome={produto.descricaoCurta}
+                preco={produto.preco}
+                descricao={produto.descricaoCurta}
 
+              />
+            </TouchableOpacity>))
+        }
       </ScrollView>
     )
   }
-
 }
 
 const styles = StyleSheet.create({
   background: {
     flex: 1,
     backgroundColor: 'black',
-    marginTop: 23,
-  }
+    paddingTop: 5
+    }
 });
 

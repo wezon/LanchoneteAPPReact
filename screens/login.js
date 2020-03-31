@@ -3,13 +3,6 @@ import { StyleSheet, Text, TextInput, View, KeyboardAvoidingView, TouchableOpaci
 import apiNode from '../services/apiNode';
 
 export default class Login extends Component {
-
-
-  Login({navigation})
-  {
-    console.log("navigation");
-
-  }
   state = {
     errorMessage: null,
     login: null,
@@ -17,56 +10,57 @@ export default class Login extends Component {
     usuarioLogado: null,
   };
   render() {
-    return(
-    <KeyboardAvoidingView style={styles.background} behavior="padding" enabled>
-      <View style={styles.containerLogo}>
-        <Image
-          source={require('../assets/logo.png')}
-        />
-      </View>
-      <View style={styles.container}>
-    {!!this.state.errorMessage && <Text style={styles.text}> {this.state.errorMessage} </Text> }
-    {!!this.state.usuarioLogado && <Text style={styles.text}> {this.state.usuarioLogado.nome} </Text> }
-        <TextInput
-          placeholder="Login"
-          autoCorrect={false}
-          style={styles.input}
-          onChangeText={(value) => this.setState({login: value})}
+    return (
+      <KeyboardAvoidingView style={styles.background} behavior="padding" enabled>
+        <View style={styles.containerLogo}>
+          <Image
+            source={require('../assets/logo.png')}
+          />
+        </View>
+        <View style={styles.container}>
+          {!!this.state.errorMessage && <Text style={styles.text}> {this.state.errorMessage} </Text>}
+          {!!this.state.usuarioLogado && <Text style={styles.text}> {this.state.usuarioLogado.nome} </Text>}
+          <TextInput
+            placeholder="Login"
+            autoCorrect={false}
+            style={styles.input}
+            onChangeText={(value) => this.setState({ login: value })}
             value={this.state.login}
-        />
-        <TextInput
-          placeholder="Senha"
-          autoCorrect={false}
-          style={styles.input}
-          onChangeText={(value) => this.setState({senha: value})}
-          secureTextEntry={true}
+          />
+          <TextInput
+            placeholder="Senha"
+            autoCorrect={false}
+            style={styles.input}
+            onChangeText={(value) => this.setState({ senha: value })}
+            secureTextEntry={true}
             value={this.state.senha}
-        />
-        <TouchableOpacity style={styles.botao} onPress={this.signIn}>
-          <Text style={styles.text}> Acessar</Text>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Text onPress={this.teste} style={styles.text}>Esqueci minha senha</Text>
-        </TouchableOpacity>
-      </View>
+          />
+          <TouchableOpacity style={styles.botao} onPress={this.signIn}>
+            <Text style={styles.text}> Acessar</Text>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Text onPress={this.teste} style={styles.text}>Esqueci minha senha</Text>
+          </TouchableOpacity>
+        </View>
 
-    </KeyboardAvoidingView>
-    )};
- async componentDidMount(){
-  const token = await AsyncStorage.getItem('@LanchoneteAPPReact:token');
-  const user = JSON.parse( await AsyncStorage.getItem('@LanchoneteAPPReact:user'));
-  console.log(token);
-  console.log(user);
-  
-  if( token && user)
-    this.setState({usuarioLogado: user});
-   
- }
-teste = () =>{
-  
+      </KeyboardAvoidingView>
+    )
+  };
 
-}
-signIn = async () => {
+
+  async componentDidMount() {
+    const token = await AsyncStorage.getItem('@LanchoneteAPPReact:token');
+    const user = JSON.parse(await AsyncStorage.getItem('@LanchoneteAPPReact:user'));
+    console.log(token);
+    console.log(user);
+
+    if (token && user)
+      this.setState({ usuarioLogado: user });
+
+  }
+  teste = () => {
+  }
+  signIn = async () => {
     try {
       const response = await apiNode.post('/User/auth', {
         login: this.state.login,
@@ -77,9 +71,9 @@ signIn = async () => {
         ['@LanchoneteAPPReact:token', token],
         ['@LanchoneteAPPReact:user', JSON.stringify(user)],
       ]);
-      this.setState({usuarioLogado: user});
+      this.setState({ usuarioLogado: user });
       this.props.navigation.navigate('ListaProdutos');
-      
+
 
     } catch (response) {
       this.setState({ errorMessage: response.data.error });
@@ -87,50 +81,50 @@ signIn = async () => {
   };
 }
 const styles = StyleSheet.create({
-    background: {
-      flex: 1,
-      backgroundColor: 'black',
-      alignItems: 'center',
-      justifyContent: 'center',
-      paddingTop: 15,
-    },
-    container: {
-      flex: 1,
-      backgroundColor: 'black',
-      justifyContent: 'center',
-      alignItems: 'center',
-      width: "90%",
-      paddingBottom: 10,
-    },
-    containerLogo: {
-      flex: 1,
-      backgroundColor: 'black',
-      justifyContent: 'center',
-      alignItems: 'center',
-      width: "90%",
-    },
-    input: {
-      backgroundColor: "#fff",
-      width: "90%",
-      marginBottom: 15,
-      color: "black",
-      fontSize: 17,
-      borderRadius: 7,
-      padding: 10,
+  background: {
+    flex: 1,
+    backgroundColor: 'black',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 15,
+  },
+  container: {
+    flex: 1,
+    backgroundColor: 'black',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: "90%",
+    paddingBottom: 10,
+  },
+  containerLogo: {
+    flex: 1,
+    backgroundColor: 'black',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: "90%",
+  },
+  input: {
+    backgroundColor: "#fff",
+    width: "90%",
+    marginBottom: 15,
+    color: "black",
+    fontSize: 17,
+    borderRadius: 7,
+    padding: 10,
 
-    },
-    text: {
-      color: "white",
-      fontSize: 17,
-    },
-    botao: {
-      width: "90%",
-      backgroundColor: "#35AAFF",
-      borderRadius: 7,
-      justifyContent: 'center',
-      height: 45,
-      alignItems: 'center',
-      marginBottom: 5,
-    }
+  },
+  text: {
+    color: "white",
+    fontSize: 17,
+  },
+  botao: {
+    width: "90%",
+    backgroundColor: "#35AAFF",
+    borderRadius: 7,
+    justifyContent: 'center',
+    height: 45,
+    alignItems: 'center',
+    marginBottom: 5,
+  }
 
-  });
+});

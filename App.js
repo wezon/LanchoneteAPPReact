@@ -6,7 +6,7 @@ import Navigator from './routes/homeStacks';
 
 
 export default function App() {
-  return (<ListaProdutos/>);
+  //return (<ListaProdutos/>);
   return (<Navigator/>);
   return (< Produto img = "IMAGEM"
       nome = "x salada"
