@@ -1,24 +1,54 @@
-import React, {Component} from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import React, { Component } from 'react';
+import { StyleSheet, Text, View, KeyboardAvoidingView } from 'react-native';
+import ApiNode from '../services/apiNode';
+import NumberFormat from 'react-number-format';
+
 
 export default class produtoDetalhado extends Component {
+    state = {
+        produtos: null
+    }
+    async componentDidMount() {
+        try {
+            const { params } = this.props.navigation.state;
+            const id = params.id.id;
+            const produto = await ApiNode.get('/Produto/' + id);
+            console.log(produto.data);
+
+            this.setState({ produtos: produto.data });
+        } catch (response) {
+            this.setState({ errorMessage: response.data.error });
+        }
+    }
     render() {
-        const { params } = this.props.navigation.state;
-        const id = params.id.id;
-        console.log(id);
         return (
-            <View style={styles.background} behavior="padding" enabled>
-                <View style={styles.container}>
-                    <Text style={styles.text}>Nome: {id}</Text>
+            <KeyboardAvoidingView style={styles.background} behavior="padding" enabled>
+                <View style={styles.containerIMG}>
+                    <Text style={styles.text}>{123}</Text>
                 </View>
-            </View>
+                <View style={styles.container}>
+                    {!!this.state.produtos && <Text style={styles.text}>Nome: {this.state.produtos.descricaoCurta}</Text>}
+                    {!!this.state.produtos && <NumberFormat
+                        decimalScale={2}
+                        fixedDecimalScale={true}
+                        value={this.state.produtos.preco}
+                        displayType={'text'}
+                        thousandSeparator={true}
+                        prefix={'R$'}
+                        renderText={
+                            value => <Text style={styles.text}>Preço: {value}</Text>
+                        } />}
+                   {!!this.state.produtos && <Text style={styles.text}>Desc: {this.state.produtos.descricao}</Text>}
+                </View>
+            </KeyboardAvoidingView>
         );
     }
+
 }
+
 const styles = StyleSheet.create({
     background: {
         flex: 1,
-        flexDirection: 'row',
         backgroundColor: 'black',
         alignItems: 'center',
         justifyContent: 'center',
@@ -28,24 +58,19 @@ const styles = StyleSheet.create({
     text: {
         color: "white",
         fontSize: 17,
+        textAlign: 'center'
     },
     container: {
         flex: 2,
         backgroundColor: 'black',
         justifyContent: 'center',
-        paddingBottom: 10,
+        
     },
     containerIMG: {
         flex: 1,
         backgroundColor: 'black',
         justifyContent: 'center',
         alignItems: 'center',
-        paddingBottom: 10,
-    },
-    linha: {
-        borderWidth: 0.5,
-        borderColor: 'white',
-        margin: 10,
     }
 
 });

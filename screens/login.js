@@ -19,7 +19,6 @@ export default class Login extends Component {
         </View>
         <View style={styles.container}>
           {!!this.state.errorMessage && <Text style={styles.text}> {this.state.errorMessage} </Text>}
-          {!!this.state.usuarioLogado && <Text style={styles.text}> {this.state.usuarioLogado.nome} </Text>}
           <TextInput
             placeholder="Login"
             autoCorrect={false}
@@ -49,14 +48,23 @@ export default class Login extends Component {
 
 
   async componentDidMount() {
-    const token = await AsyncStorage.getItem('@LanchoneteAPPReact:token');
+    const tokenantigo = await AsyncStorage.getItem('@LanchoneteAPPReact:token');
     const user = JSON.parse(await AsyncStorage.getItem('@LanchoneteAPPReact:user'));
-    console.log(token);
-    console.log(user);
+    if (user && tokenantigo) {
+      try {
+        this.setState({ usuarioLogado: user });
+        const response = await apiNode.put('/User/Atualizatoken', {
+          login: user.login,
+        });
 
-    if (token && user)
-      this.setState({ usuarioLogado: user });
-
+        const { token } = response.data;
+        await AsyncStorage.setItem('@LanchoneteAPPReact:token', token);
+        this.props.navigation.navigate('ListaProdutos');
+      } catch (response) {
+        console.log(response);
+        this.setState({ errorMessage: response.data });
+      }
+    }
   }
   teste = () => {
   }

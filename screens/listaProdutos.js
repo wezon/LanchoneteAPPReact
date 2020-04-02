@@ -6,19 +6,20 @@ import apiNode from '../services/apiNode';
 
 export default class listaProdutos extends Component {
   state = {
-    produtos: []
+    produtos: [],
+
   };
   onClickProduto = async (id) => {
-    console.log(id);
     this.props.navigation.navigate('ProdutoDetalhado',{ id: { id } });
   }
   async componentDidMount() {
     try {
       const produto = await apiNode.get('/produto');
       this.setState({ produtos: produto.data });
-
     } catch (response) {
       this.setState({ errorMessage: response.data.error });
+    this.props.navigation.navigate('Login');
+
     }
   }
   render() {
