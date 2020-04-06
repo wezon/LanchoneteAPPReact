@@ -38,7 +38,7 @@ export default class Login extends Component {
             <Text style={styles.text}> Acessar</Text>
           </TouchableOpacity>
           <TouchableOpacity>
-            <Text onPress={this.teste} style={styles.text}>Esqueci minha senha</Text>
+            <Text onPress={this.esqueciMinhaSenha} style={styles.text}>Esqueci minha senha</Text>
           </TouchableOpacity>
         </View>
 
@@ -66,7 +66,9 @@ export default class Login extends Component {
       }
     }
   }
-  teste = () => {
+  esqueciMinhaSenha = () => {
+    this.props.navigation.navigate('EsqueciMinhaSenha');
+
   }
   signIn = async () => {
     try {

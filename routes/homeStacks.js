@@ -5,7 +5,9 @@ import { createAppContainer } from 'react-navigation';
 import Login from '../screens/login';
 import listaProdutos from '../screens/listaProdutos';
 import produtoDetalhado from '../screens/produtoDetalhado';
-
+import esqueciMinhaSenha from '../screens/esqueciMinhaSenha';
+import codigoDeConfirmacao from '../screens/codigoDeConfirmacao';
+codigoDeConfirmacao
 const screens = {
     Login: {
         screen: Login,
@@ -19,9 +21,7 @@ const screens = {
             headerTitleStyle: {
                 fontWeight: 'bold',
             },
-
         }
-
     },
     ListaProdutos: {
         screen: listaProdutos,
@@ -53,6 +53,46 @@ const screens = {
         screen: produtoDetalhado,
         navigationOptions: {
             headerTitle: 'Produto Detalhado',
+            headerTitleAlign: 'center',
+            headerStyle: {
+                backgroundColor: 'black',
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+                fontWeight: 'bold',
+            },
+            headerRight: () => (
+                <TouchableOpacity onPress={async () => {
+                    await AsyncStorage.multiSet([
+                        ['@LanchoneteAPPReact:token', ''],
+                        ['@LanchoneteAPPReact:user', ''],
+                    ]);
+                    navigation.navigate('Login');
+
+                }}>
+                    <Text style={styles.text}> LogOut</Text>
+                </TouchableOpacity >
+            )
+        }
+    },
+    EsqueciMinhaSenha: {
+        screen: esqueciMinhaSenha,
+        navigationOptions: {
+            headerTitle: 'Resetar Senha',
+            headerTitleAlign: 'center',
+            headerStyle: {
+                backgroundColor: 'black',
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+                fontWeight: 'bold',
+            },
+        }
+    },
+    CodigoDeConfirmacao: {
+        screen: codigoDeConfirmacao,
+        navigationOptions: {
+            headerTitle: 'Confirmar Troca de Senha',
             headerTitleAlign: 'center',
             headerStyle: {
                 backgroundColor: 'black',
