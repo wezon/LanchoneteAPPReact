@@ -13,7 +13,6 @@ export default class produtoDetalhado extends Component {
             const { params } = this.props.navigation.state;
             const id = params.id.id;
             const produto = await ApiNode.get('/Produto/' + id);
-            console.log(produto.data);
 
             this.setState({ produtos: produto.data });
         } catch (response) {

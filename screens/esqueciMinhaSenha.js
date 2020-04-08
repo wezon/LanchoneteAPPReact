@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, TextInput, View, KeyboardAvoidingView, TouchableOpacity, Image, AsyncStorage, Alert } from 'react-native';
+import ApiNode from '../services/apiNode';
+
 
 export default class esqueciMinhaSenha extends Component {
     state = {
@@ -13,6 +15,7 @@ export default class esqueciMinhaSenha extends Component {
         return (
             <KeyboardAvoidingView style={styles.background} behavior="padding" enabled>
                 <View style={styles.container}>
+                    {!!this.state.errorMessage && <Text style={styles.text}> {this.state.errorMessage} </Text>}
                     <TextInput
                         placeholder="Login"
                         autoCorrect={false}
@@ -42,12 +45,22 @@ export default class esqueciMinhaSenha extends Component {
             </KeyboardAvoidingView>
         )
     };
-    codigoDeConfirmacao = () => {
-        this.props.navigation.navigate('CodigoDeConfirmacao',{senha: this.state.senha });
-    };
+    codigoDeConfirmacao = async () => {
+        try {
+            if (!this.state.senha)
+                throw response = {
+                    data: {
+                        error: "Senha não pode estar vazia"
+                    }
+                };
+            await ApiNode.post('/user/resetasenha', { login: this.state.login, email: this.state.email });
+            this.props.navigation.navigate('CodigoDeConfirmacao', { senha: this.state.senha, login: this.state.login, email: this.state.email });
+        } catch (response) {
+            this.setState({ errorMessage: response.data.error });
+        }
+    }
+
 }
-
-
 
 const styles = StyleSheet.create({
     background: {
