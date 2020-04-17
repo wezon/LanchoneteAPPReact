@@ -31,7 +31,7 @@ export default class esqueciMinhaSenha extends Component {
                         value={this.state.email}
                     />
                     <TextInput
-                        placeholder="Senha"
+                        placeholder="Nova senha"
                         autoCorrect={false}
                         style={styles.input}
                         onChangeText={(value) => this.setState({ senha: value })}
@@ -53,7 +53,13 @@ export default class esqueciMinhaSenha extends Component {
                         error: "Senha não pode estar vazia"
                     }
                 };
-            await ApiNode.post('/user/resetasenha', { login: this.state.login, email: this.state.email });
+                if(this.state.senha.length < 6 || this.state.senha.length > 12)
+                throw response = {
+                    data: {
+                        error: "Senha deve ter entre 6 e 12 caracteres front"
+                    }
+                };
+            await ApiNode.post('/user/resetasenha', { login: this.state.login, email: this.state.email, senha : this.state.senha });
             this.props.navigation.navigate('CodigoDeConfirmacao', { senha: this.state.senha, login: this.state.login, email: this.state.email });
         } catch (response) {
             this.setState({ errorMessage: response.data.error });

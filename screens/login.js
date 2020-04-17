@@ -48,22 +48,10 @@ export default class Login extends Component {
 
 
   async componentDidMount() {
-    const tokenantigo = await AsyncStorage.getItem('@LanchoneteAPPReact:token');
+    const token = await AsyncStorage.getItem('@LanchoneteAPPReact:token');
     const user = JSON.parse(await AsyncStorage.getItem('@LanchoneteAPPReact:user'));
-    if (user && tokenantigo) {
-      try {
-        this.setState({ usuarioLogado: user });
-        const response = await apiNode.put('/User/Atualizatoken', {
-          login: user.login,
-        });
-
-        const { token } = response.data;
-        await AsyncStorage.setItem('@LanchoneteAPPReact:token', token);
+    if (user && token) {
         this.props.navigation.navigate('ListaProdutos');
-      } catch (response) {
-        console.log(response);
-        this.setState({ errorMessage: response.data });
-      }
     }
   }
   esqueciMinhaSenha = () => {

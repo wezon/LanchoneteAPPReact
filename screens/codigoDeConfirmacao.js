@@ -41,16 +41,24 @@ export default class codigoDeConfirmacao extends Component {
         )
     };
     confirmar = async () => {
-        
+        try {
+            if (!this.state.codigoDeConfirmacao)
+                throw response = {
+                    data: {
+                        error: "Codigo de confirmação não pode estar vazio"
+                    }
+                };
+            await ApiNode.post('/user/validacodigoresetsenha', { login: this.state.login, senha: this.state.senha , token: this.state.codigoDeConfirmacao });
+
+            Alert.alert("", "Senha alterada!!");
+            this.props.navigation.navigate('Login');
+        } catch (response) {
+            this.setState({ errorMessage: response.data.error });
+        }
     }
     reenviar = async () => {
         try {
-            if (!this.state.senha)
-                throw response = {
-                    data: {
-                        error: "Senha não pode estar vazia"
-                    }
-                };
+            
             await ApiNode.post('/user/resetasenha', { login: this.state.login, email: this.state.email });
 
             Alert.alert("", "Código reenviado!!");
